@@ -8,12 +8,13 @@
 \usepackage[textfont={it}]{subcaption}  % used for subfigures and \captionsetup
 \usepackage{todonotes}  % used for \todo
 \presetkeys{todonotes}{inline}{}    % enable 1-line todos so it works in beamer
+\usepackage{lipsum}  
 \usepackage{multicol}   % used for TOC
 \usepackage{bm}  % used for bold and prettier greek letters
 \usepackage{mathtools}  % used for \DeclarePairedDelimiter
 \usepackage[citestyle=authortitle-icomp,mincitenames=1,maxcitenames=1,bibstyle=ieee,backend=bibtex8]{biblatex}
-\addbibresource{mybib}
-\addbibresource{mybib2}  % any .bibs
+\addbibresource{bibCustom}
+% \addbibresource{mybib2}  % any .bibs
 \preto\fullcite{\AtNextCite{\defcounter{maxnames}{99}}}  % displays all authors when calling fullcite
 
 % %%% MACROS %%%
@@ -23,12 +24,12 @@
 \title{mytitle}
 \subtitle{mysubtitle}
 \author{me}
-% \def\advisor{myadvisor} % if defined, will appear on the title page
+\def\advisor{myadvisor} % if defined, will appear on the title page
 \date{\today}
 
 %%% LAAS THEME %%%
 % /!\ place the \usetheme after \usepackage{biblatex} which overwrites \bibfont
-\usetheme[navigation, sectionframe, sectiontoc]{laas} % placed after \usepackage{biblatex} for \bibfont
+\usetheme[navigation, sectiontoc]{laas} % placed after \usepackage{biblatex} for \bibfont
 % options:
 %  navigation: display navigation dots at the bottom of each slides, see .sty for comments and details
 %  sectionframe: automatically generates section page
@@ -44,7 +45,9 @@
 \begin{frame}
     \titlepage
 \end{frame}
+
 %--- Next Frame ---%
+% \setkeys{Gin}{draft}
 
 %%% T0C %%%
 \begin{frame}{Outline}
@@ -58,44 +61,47 @@
 
 %%% INTRO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Section 1}
-\begin{frame}{slide title}
-    my super text \footcite{mycitation}
+\begin{frame}{Section 1}
+    \lipsum[1]
 \end{frame}
 
-\subsection{my super subsection}
-\begin{frame}{~}%no title on slide
+\subsection{Subsection 1}
+\begin{frame}{Subsection 1}%no title on slide
     \visible<+->{\begin{minipage}{0.45\textwidth}\center
 		\includegraphics[height=0.36\textheight]{logo_laas.png}\\
 	\end{minipage}}%
 	\hspace{0.5cm}
 	\visible<+->{\begin{minipage}{0.45\textwidth}\center
-		\includegraphics[height=0.36\textheight]{logo_ram.png}\\
+		\includegraphics[height=0.36\textheight]{imgs/Logo_universite_toulouse_2023.png}\\
 	\end{minipage}}%
 	\vspace{0.2cm}
 	\visible<+->{\begin{minipage}{0.45\textwidth}\center
 		\includegraphics[height=0.36\textheight]{logo_laas.png}\\
 	\end{minipage}}
 \end{frame}
+\subsection{Citations}
+\begin{frame}{Citations}
+    \lipsum[1] \footcite{mycitation}
+\end{frame}
+\begin{frame}{Citations}
+    \lipsum[1] \footcite{mycitation}
+\end{frame}
 
 \section{Section 2}
 \subsection{foo}
-\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
+\begin{frame}{Citations}
+    \lipsum[1] \footcite{mycitation}
+\end{frame}
 \subsection{bar}
-\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
-\subsection{foobar}
-\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
-\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
-
-\section{Section 3}
-\subsection*{toto}
-\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
-\section{Section 4}
-\subsection{tata}
-\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
+\begin{frame}{Citations}
+    \lipsum[1] \footcite{mycitation}
+\end{frame}
+\begin{frame}{Citations}
+    \lipsum[1] \footcite{mycitation}
+\end{frame}
 
 
-
-%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \biblio
 \begin{frame}{}
     \begin{centering}

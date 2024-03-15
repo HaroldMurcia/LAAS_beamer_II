@@ -1,6 +1,7 @@
 \mode<presentation>
 
 \RequirePackage{tikz}
+\RequirePackage{xcolor}
 
 % Default canvas size for 4/3 slides: 12.8 x 9.6 cm
 
@@ -41,9 +42,10 @@
 % cf. https://www.laas.fr/files/RE-COM/Modeles-documents/Charte-graphiqueLAAS_082016.pdf
 \definecolor{laas_anthraciteblue}{RGB}{0,41,75}
 \definecolor{laas_lightblue}{RGB}{98,196,221}
-\definecolor{laas_red}{RGB}{233,75,87}
+\definecolor{laas_red}{RGB}{255,46,69}
+\definecolor{cnrs_yellow}{RGB}{255,235,110}
 
-
+            
 %%% TITLE FRAME %%%
 \setbeamercolor*{title page header}{fg=white}
 \setbeamerfont*{title}{family=\bfseries}
@@ -54,10 +56,13 @@
             \fill[color=laas_anthraciteblue] (0,5cm) rectangle (\the\paperwidth,7cm);
             \fill[color=laas_red] (5cm,4.8cm) rectangle (\the\paperwidth,5.2cm);
             \node[inner sep=0pt] (laas) at (2.2cm,\the\paperheight-1.1cm) {\includegraphics[height=1.8cm]{imgs/logo_laas.png}};
-            % \node[inner sep=0pt] (ram) at (\the\paperwidth-1.7cm,\the\paperheight-1.3cm) {\includegraphics[height=2cm]{imgs/logo_ram.png}};
-            \fill[color=laas_anthraciteblue] (0,0) rectangle (\the\paperwidth,1cm);
-            \node[inner sep=0pt] (cnrs) at (.5cm,.5cm) {\includegraphics[height=.9cm]{imgs/logo_cnrs.png}};
-            \node[inner sep=0pt] (ut) at (\the\paperwidth-.9cm,.5cm) {\includegraphics[height=.9cm]{imgs/logo_ut_white_text.png}};
+
+            \node[inner sep=0pt] (cnrs) at (1.7cm,1.8cm) {\includegraphics[height=4cm]{imgs/cnrs_bottom.png}};
+            \node[inner sep=0pt] (ut) at (\the\paperwidth-2cm,.7cm) {\includegraphics[height=.7cm]{imgs/Logo_universite_toulouse_2023.png}};
+            \node[inner sep=0pt] (univ_toul) at (\the\paperwidth-2cm, 1.3cm) {{\tiny Laboratoire conventionné avec }};
+            \node[inner sep=0pt] (laas_cnrs) at (4cm, 0.5cm) {{\tiny \textcolor{laas_lightblue}{LAAS-CNRS}}};
+            \node[inner sep=0pt] (laas_cnrs) at (6.4cm, 0.3cm) {{\tiny \textcolor{laas_lightblue}{/} Laboratoire d'analyse et d'architecture des systèmes du CNRS}};
+
             \node[anchor=east, white] (title) at (\paperwidth-.9cm,6cm) {
                 \begin{beamercolorbox}[right]{title page header}
                 \usebeamerfont{title}{
@@ -103,8 +108,9 @@
         \begin{beamercolorbox}[wd=\paperwidth,ht=1cm]{frametitle}
             \begin{tikzpicture}
                 \fill[color=laas_anthraciteblue] (2cm,0) rectangle (1.1\paperwidth,1cm);
+                \fill[color=white] (2cm, 0.7cm) rectangle (0.98\paperwidth, 0.1cm);
                 \node[inner sep=0pt] (laas) at (1cm,.49cm) {\includegraphics[height=1cm]{imgs/logo_laas.png}};
-                \node[anchor=base west, white,font=\large] at (2cm,.4cm){\insertframetitle};
+                \node[anchor=base west, white,font=\Large] at (2cm,.24cm){\textcolor{laas_lightblue}{\textbf{\insertframetitle}}};
             \end{tikzpicture}
         \end{beamercolorbox}
     \fi
@@ -180,7 +186,10 @@
     \else
         \begin{beamercolorbox}[wd=\paperwidth,ht=1cm]{section in head/foot}
             \begin{tikzpicture}
-                \fill[color=laas_anthraciteblue] (0,0) rectangle (\the\paperwidth,1cm);
+                \fill[color=laas_anthraciteblue] (0,0) rectangle (\the\paperwidth,0cm);
+                \fill[color=white] (0, 0.1) rectangle (\the\paperwidth, 0cm);
+                \fill[color=laas_red] (6.5cm, 0.25cm) rectangle (\the\paperwidth, 0cm);
+
                 % Empty footer for appendix
                 \ifbeamer@inappendix%
                 \else
@@ -202,9 +211,9 @@
                         };
                     \fi
                 \fi
-                \node[inner sep=0pt] (cnrs) at (.5cm,.5cm) {\includegraphics[height=.9cm]{imgs/logo_cnrs.png}};
-                \node[inner sep=0pt] (ut) at (\the\paperwidth-.5cm,.5cm) {\includegraphics[height=.9cm]{imgs/logo_ut_notext.png}};
-                \node[anchor=base east, white] at (\paperwidth-.9cm, .1cm){\insertframenumber
+                \node[inner sep=0pt] (cnrs) at (.5cm,.5cm) {\includegraphics[height=.8cm]{imgs/LOGO_CNRS_BLEU.png}};
+                % \node[inner sep=0pt] (ut) at (\the\paperwidth-.5cm,.5cm) {\includegraphics[height=.9cm]{imgs/logo_ut_notext.png}};
+                \node[anchor=base east, white] at (\paperwidth-.7cm, .5cm){\insertframenumber
                 \if@OptFrameTotal
                     /\inserttotalframenumber
                 \fi
@@ -289,6 +298,7 @@
 \beamer@todo%
 \fi\fi%
 }
+
 \defbeamertemplate{subsection in toc}{custom subsections}{%
     \footnotesize\leavevmode\leftskip=2em\inserttocsectionnumber.\inserttocsubsectionnumber.~\inserttocsubsection\par
 }
