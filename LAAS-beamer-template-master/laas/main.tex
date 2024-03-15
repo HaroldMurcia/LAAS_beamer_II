@@ -1,0 +1,117 @@
+%%% BEAMER HEADER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+
+
+%%% PACKAGES %%%
+\usepackage[utf8]{inputenc}
+\usepackage[textfont={it}]{subcaption}  % used for subfigures and \captionsetup
+\usepackage{todonotes}  % used for \todo
+\presetkeys{todonotes}{inline}{}    % enable 1-line todos so it works in beamer
+\usepackage{multicol}   % used for TOC
+\usepackage{bm}  % used for bold and prettier greek letters
+\usepackage{mathtools}  % used for \DeclarePairedDelimiter
+\usepackage[citestyle=authortitle-icomp,mincitenames=1,maxcitenames=1,bibstyle=ieee,backend=bibtex8]{biblatex}
+\addbibresource{mybib}
+\addbibresource{mybib2}  % any .bibs
+\preto\fullcite{\AtNextCite{\defcounter{maxnames}{99}}}  % displays all authors when calling fullcite
+
+% %%% MACROS %%%
+% some user defined macros
+
+%%% METADATA %%%
+\title{mytitle}
+\subtitle{mysubtitle}
+\author{me}
+% \def\advisor{myadvisor} % if defined, will appear on the title page
+\date{\today}
+
+%%% LAAS THEME %%%
+% /!\ place the \usetheme after \usepackage{biblatex} which overwrites \bibfont
+\usetheme[navigation, sectionframe, sectiontoc]{laas} % placed after \usepackage{biblatex} for \bibfont
+% options:
+%  navigation: display navigation dots at the bottom of each slides, see .sty for comments and details
+%  sectionframe: automatically generates section page
+%  sectiontoc: add partial toc for each section frame (overrides sectionframe)
+%  frametotal: display total number of frames in addition to current frame number
+
+
+%%% DOCUMENT HEADER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\graphicspath{{imgs/}}
+\begin{document}
+
+%%% TITLE %%%
+\begin{frame}
+    \titlepage
+\end{frame}
+%--- Next Frame ---%
+
+%%% T0C %%%
+\begin{frame}{Outline}
+    \begin{multicols}{2}
+        \tableofcontents[subsubsectionstyle=hide]
+    \end{multicols}
+\end{frame}
+%--- Next Frame ---%
+
+
+
+%%% INTRO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Section 1}
+\begin{frame}{slide title}
+    my super text \footcite{mycitation}
+\end{frame}
+
+\subsection{my super subsection}
+\begin{frame}{~}%no title on slide
+    \visible<+->{\begin{minipage}{0.45\textwidth}\center
+		\includegraphics[height=0.36\textheight]{logo_laas.png}\\
+	\end{minipage}}%
+	\hspace{0.5cm}
+	\visible<+->{\begin{minipage}{0.45\textwidth}\center
+		\includegraphics[height=0.36\textheight]{logo_ram.png}\\
+	\end{minipage}}%
+	\vspace{0.2cm}
+	\visible<+->{\begin{minipage}{0.45\textwidth}\center
+		\includegraphics[height=0.36\textheight]{logo_laas.png}\\
+	\end{minipage}}
+\end{frame}
+
+\section{Section 2}
+\subsection{foo}
+\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
+\subsection{bar}
+\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
+\subsection{foobar}
+\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
+\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
+
+\section{Section 3}
+\subsection*{toto}
+\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
+\section{Section 4}
+\subsection{tata}
+\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}\frame{\frametitle{~}}
+
+
+
+%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\biblio
+\begin{frame}{}
+    \begin{centering}
+        \begin{beamercolorbox}[sep=12pt,center]{part_roman title}
+            \usebeamerfont{section title}\Large Thank you for your attention!
+        \end{beamercolorbox}
+    \end{centering}
+\end{frame}
+%--- Next Frame ---%
+
+
+
+%%% HIDDEN EXTRA SLIDES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Hidden frames}
+% \addtocounter{framenumber}{-4}  % subtract number of extra slides to total slide number
+
+
+%%% END DOCUMENT %%%
+\end{document}

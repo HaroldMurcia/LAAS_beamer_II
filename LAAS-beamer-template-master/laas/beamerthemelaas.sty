@@ -1,0 +1,371 @@
+\mode<presentation>
+
+\RequirePackage{tikz}
+
+% Default canvas size for 4/3 slides: 12.8 x 9.6 cm
+
+% \newif\ifinappendix  % Default is \inappendixfalse
+% \let\oldappendix\appendix  % Store \appendix
+% \renewcommand{\appendix}{  % Update \appendix
+%     \oldappendix  % Default \appendix
+%     \inappendixtrue  % Set switch to true
+% }
+
+% % Not used so far
+% \setbeamertemplate{note page}{
+%     \pagecolor{yellow!5}
+%     {\tiny\insertnote}
+% }
+
+%%% OPTIONS %%%
+% Enable navigation panel in footer
+\newif\if@OptNavigation
+\@OptNavigationfalse
+\DeclareOption{navigation}{\@OptNavigationtrue}
+% Enable frame total in footer
+\newif\if@OptFrameTotal
+\@OptFrameTotalfalse
+\DeclareOption{frametotal}{\@OptFrameTotaltrue}
+% Enable section page by default
+\newif\if@OptSectionFrame
+\@OptSectionFramefalse
+\DeclareOption{sectionframe}{\@OptSectionFrametrue}
+% Enable partial TOC on section frames
+\newif\if@OptSectionToc
+\@OptSectionTocfalse
+\DeclareOption{sectiontoc}{\@OptSectionToctrue}
+\ProcessOptions
+
+
+%%% CUSTOM COLORS %%%
+% cf. https://www.laas.fr/files/RE-COM/Modeles-documents/Charte-graphiqueLAAS_082016.pdf
+\definecolor{laas_anthraciteblue}{RGB}{0,41,75}
+\definecolor{laas_lightblue}{RGB}{98,196,221}
+\definecolor{laas_red}{RGB}{233,75,87}
+
+
+%%% TITLE FRAME %%%
+\setbeamercolor*{title page header}{fg=white}
+\setbeamerfont*{title}{family=\bfseries}
+\defbeamertemplate*{title page}{laas}[1][]{
+    \begin{tikzpicture}
+        \useasboundingbox (1,0) rectangle(\the\paperwidth,\the\paperheight);
+        \ifnum\thepage<2\relax
+            \fill[color=laas_anthraciteblue] (0,5cm) rectangle (\the\paperwidth,7cm);
+            \fill[color=laas_red] (5cm,4.8cm) rectangle (\the\paperwidth,5.2cm);
+            \node[inner sep=0pt] (laas) at (2.2cm,\the\paperheight-1.1cm) {\includegraphics[height=1.8cm]{imgs/logo_laas.png}};
+            % \node[inner sep=0pt] (ram) at (\the\paperwidth-1.7cm,\the\paperheight-1.3cm) {\includegraphics[height=2cm]{imgs/logo_ram.png}};
+            \fill[color=laas_anthraciteblue] (0,0) rectangle (\the\paperwidth,1cm);
+            \node[inner sep=0pt] (cnrs) at (.5cm,.5cm) {\includegraphics[height=.9cm]{imgs/logo_cnrs.png}};
+            \node[inner sep=0pt] (ut) at (\the\paperwidth-.9cm,.5cm) {\includegraphics[height=.9cm]{imgs/logo_ut_white_text.png}};
+            \node[anchor=east, white] (title) at (\paperwidth-.9cm,6cm) {
+                \begin{beamercolorbox}[right]{title page header}
+                \usebeamerfont{title}{
+                    \Large \inserttitle
+                    \ifx\insertsubtitle\@empty
+                    \else\par \large \insertsubtitle
+                    \fi
+                }\par
+                \end{beamercolorbox}
+            };
+            \ifx\insertauthor\@empty
+            \else\node[anchor=center, white] (author) at (.5\paperwidth,3.5cm) {
+                \begin{beamercolorbox}[center]{author}
+                    \usebeamerfont{author}\bf\insertauthor
+                \end{beamercolorbox}
+            };
+            \fi
+            \ifcsname advisor\endcsname
+            \node[anchor=center, white] (author) at (.5\paperwidth,3cm) {
+                \begin{beamercolorbox}[center]{author}
+                    \usebeamerfont{author}under the supervision of \advisor
+                \end{beamercolorbox}
+            };
+            \else
+            \fi
+            \ifx\insertdate\@empty
+            \else\node[anchor=center, white] (date) at (.5\paperwidth,2cm) {
+                \begin{beamercolorbox}[center]{date}
+                    \usebeamerfont{author}{\footnotesize \insertdate}
+                \end{beamercolorbox}
+            };
+            \fi
+        \fi
+    \end{tikzpicture}
+}
+
+
+%%% HEADER OF STANDARD FRAME %%%
+\defbeamertemplate*{frametitle}{laas}[1][]{
+    \ifx\insertframetitle\@empty
+    \else
+        \vskip-.16ex
+        \begin{beamercolorbox}[wd=\paperwidth,ht=1cm]{frametitle}
+            \begin{tikzpicture}
+                \fill[color=laas_anthraciteblue] (2cm,0) rectangle (1.1\paperwidth,1cm);
+                \node[inner sep=0pt] (laas) at (1cm,.49cm) {\includegraphics[height=1cm]{imgs/logo_laas.png}};
+                \node[anchor=base west, white,font=\large] at (2cm,.4cm){\insertframetitle};
+            \end{tikzpicture}
+        \end{beamercolorbox}
+    \fi
+}
+
+
+%%% FOOTLINE FOR STANDARD FRAMES %%%
+% Taken from beamerouterthememiniframes.sty
+% Not consistent if a section contains more that 8 subsections (probably should use compress in documentclass then) (who does this anyway?)
+% Frames not in subsections are not displayed
+\setbeamercolor{section in head/foot}{fg=white, bg=laas_anthraciteblue}
+\setbeamercolor{mini frame}{fg=white, bg=laas_lightblue}
+\patchcmd{\sectionentry}{\usebeamercolor[fg]{section in head/foot}}{\usebeamercolor[fg]{mini frame}}{}{}  % patch command to use mini frame color instead of header color for section names
+% Edit \slideentry so that it checks whether the frame was already presented or not
+%% https://tex.stackexchange.com/questions/123400/beamer-navigation-dots
+\def\slideentry#1#2#3#4#5#6{%
+% section number, subsection number, slide number, first/last frame, page number, part number
+\ifnum#2=0
+    \fakeslideentry{#1}{#2}{#3}{#4}{#5}{#6}%
+\else
+    \ifbeamer@compress%
+        \advance\beamer@xpos by1\relax%
+    \else%
+        \beamer@xpos=#3\relax%
+        \beamer@ypos=#2\relax%
+    \fi
+    \hbox to 0pt{%
+        \beamer@tempdim=-\beamer@vboxoffset%
+        \advance\beamer@tempdim by-\beamer@boxsize%
+        \multiply\beamer@tempdim by\beamer@ypos%
+        \advance\beamer@tempdim by -.05cm%
+        \raise\beamer@tempdim\hbox{%
+        \beamer@tempdim=\beamer@boxsize%
+        \multiply\beamer@tempdim by\beamer@xpos%
+        \advance\beamer@tempdim by -\beamer@boxsize%
+        \advance\beamer@tempdim by 1pt%
+        \kern\beamer@tempdim%
+        \global\beamer@section@min@dim\beamer@tempdim%
+        \hbox{\beamer@link(#4){%
+        \usebeamerfont{mini frame}%
+        \ifnum\c@section>#1%
+            \usebeamercolor[bg]{mini frame}%
+            \usebeamertemplate{mini frame}%
+        \else%
+            \ifnum\c@section=#1%
+                \ifnum\c@subsection>#2%
+                    \usebeamercolor[bg]{mini frame}%
+                    \usebeamertemplate{mini frame}%
+                \else%
+                    \ifnum\c@subsection=#2%
+                        \usebeamercolor[fg]{mini frame}%
+                        \ifnum\c@subsectionslide<#3%
+                            \usebeamertemplate{mini frame in current subsection}%
+                        \else%
+                            \usebeamertemplate{mini frame}%
+                        \fi%
+                    \else%
+                        \usebeamercolor{mini frame}%%
+                        \usebeamertemplate{mini frame in other subsection}%
+                    \fi%
+                \fi%
+            \else%
+                \usebeamercolor{mini frame}%
+                \usebeamertemplate{mini frame in other subsection}%
+            \fi%
+        \fi%
+        }}}%
+    }%
+\fi\ignorespaces%
+}
+\defbeamertemplate*{footline}{laas}{
+    \ifx\insertframetitle\@empty
+    \else
+        \begin{beamercolorbox}[wd=\paperwidth,ht=1cm]{section in head/foot}
+            \begin{tikzpicture}
+                \fill[color=laas_anthraciteblue] (0,0) rectangle (\the\paperwidth,1cm);
+                % Empty footer for appendix
+                \ifbeamer@inappendix%
+                \else
+                    \if@OptNavigation%
+                        \node[anchor=base west,font=\tiny] at (1cm,0.65cm){
+                            \begin{beamercolorbox}{section in foot}
+                                \insertnavigation{.8\paperwidth}
+                            \end{beamercolorbox}
+                        };
+                    \else
+                        \node[anchor=base west,font=\footnotesize] at (1cm,0.4cm){
+                            \insertsection
+                            \ifx\insertsubsection\@empty
+                            \else ~/ \insertsubsection
+                            \ifx\insertsubsubsection\@empty
+                            \else ~/ \insertsubsubsection
+                            \fi
+                            \fi
+                        };
+                    \fi
+                \fi
+                \node[inner sep=0pt] (cnrs) at (.5cm,.5cm) {\includegraphics[height=.9cm]{imgs/logo_cnrs.png}};
+                \node[inner sep=0pt] (ut) at (\the\paperwidth-.5cm,.5cm) {\includegraphics[height=.9cm]{imgs/logo_ut_notext.png}};
+                \node[anchor=base east, white] at (\paperwidth-.9cm, .1cm){\insertframenumber
+                \if@OptFrameTotal
+                    /\inserttotalframenumber
+                \fi
+                };
+            \end{tikzpicture}
+        \end{beamercolorbox}
+    \fi
+}
+
+
+%% SECTION FRAMES %%%
+\newcounter{part_roman}
+\setbeamertemplate{section page}{
+    \begin{centering}
+        \begin{beamercolorbox}[sep=12pt,center]{part_roman title}
+            %% Some black magic to avoid breaking \thesection (¯\_(ツ)_/¯)
+            \ifnum\thesection>0\relax
+                \setcounter{part_roman}{\thesection}
+            \fi
+            \Large\usebeamerfont{section title}{Part \Roman{part_roman}: \insertsection\par}
+        \end{beamercolorbox}
+    \end{centering}
+}
+\if@OptSectionToc
+\AtBeginSection[]{%
+    \frame{
+    \centering
+        \vskip2cm
+        \sectionpage
+        \vskip.5cm
+        \begin{minipage}{.49\textwidth}
+            \tableofcontents[current,subsectionstyle=hide]
+        \end{minipage}
+        \begin{minipage}{.49\textwidth}
+            \centering
+            ~
+            % \includegraphics[height=6cm]{imgs/section/\thesection.png}
+        \end{minipage}
+    }
+}
+\else\if@OptSectionFrame
+\AtBeginSection[]{%
+    \frame{
+        \centering
+        \sectionpage
+    }
+}
+\fi\fi
+
+
+%%% TABLE OF CONTENTS %%%
+% Edit \sectionintoc to reduce spacing between sections
+\def\beamer@sectionintoc#1#2#3#4#5{%
+\ifnum\c@tocdepth>0%
+\ifnum#4=\beamer@showpartnumber%
+{
+    \beamer@saveanother%
+    \gdef\beamer@todo{}%
+    \beamer@slideinframe=#1\relax%
+    \expandafter\only\beamer@tocsections{\gdef\beamer@todo{%
+        \beamer@tempcount=#5\relax%
+        \advance\beamer@tempcount by\beamer@sectionadjust%
+        \edef\inserttocsectionnumber{\the\beamer@tempcount}%
+        \def\inserttocsection{\hyperlink{Navigation#3}{#2}}%
+        \beamer@tocifnothide{\ifnum\c@section=#1\beamer@toc@cs\else\beamer@toc@os\fi}{%
+            \ifbeamer@pausesections\pause\fi%
+            \ifx\beamer@toc@ooss\beamer@hidetext
+                \vskip0.5em
+            \else
+                \vfill
+            \fi{%
+              \hbox{\vbox{%
+                  \def\beamer@breakhere{\\}%
+                  \beamer@tocact{\ifnum\c@section=#1\beamer@toc@cs\else\beamer@toc@os\fi}    {section in toc}}}%
+             \par%
+            }%
+        }%
+    }
+    }%
+    \beamer@restoreanother%
+}
+\beamer@todo%
+\fi\fi%
+}
+\defbeamertemplate{subsection in toc}{custom subsections}{%
+    \footnotesize\leavevmode\leftskip=2em\inserttocsectionnumber.\inserttocsubsectionnumber.~\inserttocsubsection\par
+}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[custom subsections]
+\setbeamerfont{subsubsection in toc}{size=\scriptsize}
+\setbeamercolor{section in toc}{fg=laas_anthraciteblue}
+\setbeamercolor{subsection in toc}{fg=laas_anthraciteblue}
+\setbeamercolor{subsubsection in toc}{fg=laas_anthraciteblue}
+
+
+%%% FRAME BREAK COUNTER %%%
+% Display (i/N) after frame title if need be
+\newcounter{framebreakcount}
+\setbeamertemplate{frametitle continuation}{%
+    \setcounter{framebreakcount}{\beamer@endpageofframe}%
+    \addtocounter{framebreakcount}{1}%
+    \addtocounter{framebreakcount}{-\beamer@startpageofframe}%
+    \ifnum \value{framebreakcount} > 1
+        \textmd{(\insertcontinuationcount/\arabic{framebreakcount})}%
+    \fi
+}
+\setbeamercolor{frametitle continuation}{fg=white}
+
+
+%%% BIBLIOGRAPHY %%%
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\setbeamerfont{bibliography item}{size=\scriptsize}
+\setbeamercolor{bibliography item}{fg=laas_anthraciteblue}
+
+\setbeamercolor{bibliography entry author}{fg=laas_anthraciteblue}
+\setbeamercolor{bibliography entry title}{fg=laas_anthraciteblue}
+\setbeamercolor{bibliography entry location}{fg=laas_anthraciteblue}
+\setbeamercolor{bibliography entry note}{fg=laas_anthraciteblue}
+% In case of not using biblatex
+\setbeamerfont{bibliography entry author}{size=\scriptsize}
+% /!\ If using biblatex, put \usetemplate{laas} after \usepackage{biblatex}!
+\renewcommand{\bibfont}{\scriptsize}
+% Command for convenience
+\def\biblio{
+    \appendix  % placed here to avoid Reference section being in the navigation bar
+    \begin{frame}[allowframebreaks]{Bibliography}
+        \printbibliography
+    \end{frame}
+}
+
+
+%%% FOOTNOTE MARK %%%
+% Change footnote type to usual brackets (e.g. [1])
+\def\@makefnmark{\hbox{{{\usebeamercolor[fg]{footnote mark}\usebeamerfont*{footnote mark} [\@thefnmark]}}}}
+\def\@makefntext#1{%
+\def\insertfootnotetext{ #1}%
+\def\insertfootnotemark{\@makefnmark}%
+\usebeamertemplate***{footnote}}
+
+
+%%% LISTS %%%
+\setbeamertemplate{itemize item}{\raisebox{0.1em}{\scalebox{0.8}{$\blacktriangleright$}}}
+\setbeamertemplate{itemize subitem}{\raisebox{0.15em}{\scalebox{0.4}{$\blacksquare$}}}
+\setbeamercolor{structure}{fg=laas_lightblue}
+
+
+%%% CAPTION TEXT %%%
+\setbeamercolor{caption name}{fg=laas_anthraciteblue}
+\setbeamerfont{caption name}{size=\footnotesize}
+\setbeamerfont{caption}{size=\footnotesize}
+
+
+%%% TEXT COLOR %%%
+\setbeamercolor{normal text}{fg=laas_anthraciteblue}
+
+
+%%% REMOVE BEAMER SYMBOLS %%%
+\setbeamertemplate{navigation symbols}{}
+
+
+%%% ENABLE SHADOWS AROUND BLOCKS %%%
+\setbeamertemplate{blocks}[shadow=true]
+
+\mode<all>
